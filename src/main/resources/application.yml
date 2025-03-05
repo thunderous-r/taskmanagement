@@ -1,0 +1,21 @@
+spring:
+  config:
+    import: "application-secrets.yml"
+  datasource:
+    url: jdbc:postgresql://localhost:5432/task_management_db
+    username: ${db.username}
+    password: ${db.password}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+  security:
+    jwt:
+      secret: ${jwt.secret}
+      expiration: ${jwt.expiration}
+  polygon:
+    api-key: ${api.polygon.key}
+  logging:
+    level:
+      org.springframework.security: DEBUG
