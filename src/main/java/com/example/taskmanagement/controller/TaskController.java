@@ -37,13 +37,15 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Task> updateTask(@PathVariable Long id, @Valid @RequestBody Task task) {
-        return ResponseEntity.ok(taskService.updateTask(id, task));
+    public ResponseEntity<Task> updateTask(@PathVariable Long id,
+                                           @Valid @RequestBody Task task,
+                                           Authentication authentication) {
+        return ResponseEntity.ok(taskService.updateTask(id, task, authentication.getName()));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
-        taskService.deleteTask(id);
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id, Authentication authentication) {
+        taskService.deleteTask(id, authentication.getName());
         return ResponseEntity.noContent().build();
     }
 }
