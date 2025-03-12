@@ -2,6 +2,7 @@ package com.example.taskmanagement.entity;
 
 import com.example.taskmanagement.enums.Priority;
 import com.example.taskmanagement.enums.Status;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "Информация о задаче")
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

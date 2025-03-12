@@ -16,7 +16,7 @@ public class SwaggerConfig {
         return new OpenAPI().info(new Info()
                         .title("Task Management API")
                         .version("1.0")
-                        .description("API for Task Management System"))
+                        .description("API для системы управления задачами"))
                 .addSecurityItem(new SecurityRequirement()
                         .addList(securitySchemeName))
                 .components(new Components()

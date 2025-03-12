@@ -5,6 +5,8 @@ import com.example.taskmanagement.dto.AuthResponse;
 import com.example.taskmanagement.entity.User;
 import com.example.taskmanagement.security.JwtUtil;
 import com.example.taskmanagement.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +20,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("api/auth")
 @RequiredArgsConstructor
+@Tag(name = "Аутентификация", description = "API для регистрации и аутентификации пользователей")
 public class AuthController {
     private final AuthService authService;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
+    @Operation(
+            summary = "Регистрация нового пользователя",
+            description = "Создает новую учетную запись пользователя и возвращает JWT токен для аутентификации"
+    )
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody User user) {
         User registeredUser = authService.registerUser(user);
         String token = jwtUtil.generateToken(registeredUser.getEmail());
@@ -31,6 +38,10 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @Operation(
+            summary = "Вход в систему",
+            description = "Аутентифицирует пользователя и возвращает JWT токен для дальнейшего доступа к API"
+    )
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest authRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
