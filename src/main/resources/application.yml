@@ -15,9 +15,6 @@ spring:
     jwt:
       secret: ${jwt.secret}
       expiration: ${jwt.expiration}
-  logging:
-    level:
-      org.springframework.security: DEBUG
 
 springdoc:
   swagger-ui:

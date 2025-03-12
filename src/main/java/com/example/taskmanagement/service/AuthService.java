@@ -30,6 +30,6 @@ public class AuthService {
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Не найдет пользователь с email: " + email));
+                .orElseThrow(() -> new UsernameNotFoundException("Не найден пользователь с email: " + email));
     }
 }

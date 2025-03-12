@@ -14,8 +14,6 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,14 +24,14 @@ public class TaskService {
     @Transactional
     public Task createTask(Task task, String creatorEmail) {
         User creator = userRepository.findByEmail(creatorEmail)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
         task.setCreator(creator);
         return taskRepository.save(task);
     }
 
     public Task getTaskById(Long id) {
         return taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task not found"));
+                .orElseThrow(() -> new RuntimeException("Задача не найдена"));
     }
 
     public Page<Task> getTasks(String creator, String assignee, Pageable pageable) {
@@ -49,12 +47,12 @@ public class TaskService {
     public Task updateTask(Long id, Task updatedTask, String email) {
         Task task = getTaskById(id);
         User user = userRepository.findByEmail(email)
-                        .orElseThrow(() -> new RuntimeException("User not found"));
+                        .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
 
         if (user.getRole() != Role.ADMIN &&
         !task.getCreator().getEmail().equals(email) &&
                 (task.getAssignee() == null || !task.getAssignee().getEmail().equals(email))) {
-                    throw new AccessDeniedException("You don't have permission to update this task");
+                    throw new AccessDeniedException("У вас недостаточно прав для изменения этой задачи");
                 }
 
         if (user.getRole() != Role.ADMIN &&
@@ -81,10 +79,10 @@ public class TaskService {
     public void deleteTask(Long id, String email) {
         Task task = getTaskById(id);
         User user = userRepository.findByEmail(email)
-                        .orElseThrow(() -> new RuntimeException("User not found"));
+                        .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
 
         if (user.getRole() != Role.ADMIN && !task.getCreator().getEmail().equals(email)) {
-            throw new AccessDeniedException("You don't have permission to delete this task");
+            throw new AccessDeniedException("У вас недостаточно прав для удаления этой задачи");
         }
 
         taskRepository.deleteById(id);
@@ -94,11 +92,11 @@ public class TaskService {
     public Comment addComment(Long taskId, Comment comment, String creatorEmail) {
         Task task = getTaskById(taskId);
         User creator = userRepository.findByEmail(creatorEmail)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
 
         if (creator.getRole() != Role.ADMIN && !task.getCreator().getEmail().equals(creatorEmail) &&
                 (task.getAssignee() == null || !task.getAssignee().getEmail().equals(creatorEmail))) {
-            throw new AccessDeniedException("You don't have permission to add a comment to this task");
+            throw new AccessDeniedException("У вас недостаточно прав для добавления комментариев к этой задаче");
         }
 
         comment.setTask(task);
@@ -108,7 +106,7 @@ public class TaskService {
 
     public Page<Comment> getComments(Long taskId, Pageable pageable) {
         if (!taskRepository.existsById(taskId)) {
-            throw new RuntimeException("Task not found");
+            throw new RuntimeException("Задача не найдена");
         }
         return commentRepository.findByTask_Id(taskId, pageable);
     }
