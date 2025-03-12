@@ -10,8 +10,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "Запрос на аутентификацию")
-public class AuthRequest {
+@Schema(description = "Запрос на регистрацию нового пользователя")
+public class RegisterRequest {
+
     @NotBlank(message = "Email обязателен")
     @Email(message = "Некорректный формат email")
     @Schema(description = "Email для регистрации", example = "user@example.com", required = true)

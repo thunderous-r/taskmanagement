@@ -1,5 +1,6 @@
 package com.example.taskmanagement.service;
 
+import com.example.taskmanagement.dto.RegisterRequest;
 import com.example.taskmanagement.entity.User;
 import com.example.taskmanagement.enums.Role;
 import com.example.taskmanagement.repository.UserRepository;
@@ -14,21 +15,21 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public User registerUser(User user) {
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already exists");
+    public User registerUser(RegisterRequest registerRequest) {
+        if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
+            throw new RuntimeException("Пользователь с таким email уже существует");
         }
 
-        if (user.getRole() == null) {
-            user.setRole(Role.USER);
-        }
+        User user = new User();
+        user.setEmail(registerRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        user.setRole(Role.USER);
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("Не найдет пользователь с email: " + email));
     }
 }

@@ -2,6 +2,7 @@ package com.example.taskmanagement.controller;
 
 import com.example.taskmanagement.dto.AuthRequest;
 import com.example.taskmanagement.dto.AuthResponse;
+import com.example.taskmanagement.dto.RegisterRequest;
 import com.example.taskmanagement.entity.User;
 import com.example.taskmanagement.security.JwtUtil;
 import com.example.taskmanagement.service.AuthService;
@@ -31,8 +32,8 @@ public class AuthController {
             summary = "Регистрация нового пользователя",
             description = "Создает новую учетную запись пользователя и возвращает JWT токен для аутентификации"
     )
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody User user) {
-        User registeredUser = authService.registerUser(user);
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest registerRequest) {
+        User registeredUser = authService.registerUser(registerRequest);
         String token = jwtUtil.generateToken(registeredUser.getEmail());
         return ResponseEntity.ok(new AuthResponse(token, registeredUser.getEmail(), registeredUser.getRole()));
     }
